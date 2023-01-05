@@ -8,7 +8,6 @@ import { IoMdArrowDropdown } from "react-icons/io";
 //Dependencies
 import { useState, useContext, useEffect } from "react";
 import { Toaster } from 'react-hot-toast';
-import { PredictionContext } from "../context/PredictionContext";
 import { STOCKDATA, CRYPTODATA } from "../data/asset.seed";
 import DropDown from "../components/DropDown";
 import AvailableBets from "../components/AvailableBets";
@@ -16,11 +15,9 @@ import CustomModal from "../components/CustomModal";
 
 
 // SOLANA IMPORTS
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { BN } from "@project-serum/anchor";
 import { useGlobalState } from "../hooks";
-import { getCanEnterBet, getSolAmount } from "../utils";
 
 
 //Styles
@@ -84,21 +81,11 @@ const Home = () => {
   const [stockPrice, setStockPrice] = useState(STOCKDATA[0].price);
   const [priceKey, setPriceKey] = useState(STOCKDATA[0].priceKey);
   const [availableStock, setAvailableStock] = useState([]);
-  const { balance, swapError } = useContext(PredictionContext);
 
-  // SOLANA STATES
-  const {
-    isConnected,
-    wallet,
-    allBets,
-    userBets,
-    fetchBets,
-    createBet,
-    enterBet,
-    claimBet,
-    closeBet,
-  } = useGlobalState();
-
+  // Static
+  const staticCreatebet = () => {
+    console.log("Creating bet")
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -111,7 +98,6 @@ const Home = () => {
         <div className={styles.leftMain}>
           <div className={styles.portfolioAmountContainer}>
             <div className={styles.portfolioAmount}>
-              {balance}
               {data.name}
             </div>
             <div className={styles.portfolioPercent}>
@@ -129,7 +115,7 @@ const Home = () => {
               className={styles.buyingPowerAmount}
               onClick={() => setShowBetDropdown(!showBetDropdown)}
             >
-              {balance} {stockName} <IoMdArrowDropdown />
+              {stockName} <IoMdArrowDropdown />
               {showBetDropdown && (
                 <div className={styles.dropDownBets}>
                   {STOCKDATA.filter((data) => {
@@ -229,12 +215,13 @@ const Home = () => {
                 }${" bg-[#ef4b09] w-1/4 text-center mt-8 self-center"}`}
               onClick={(e) => {
                 e.preventDefault()
-                createBet(
-                  new BN(Number(sol) * LAMPORTS_PER_SOL), // bet amount in lamports(10^-9 SOL)
-                  Number(guess), // prediction price
-                  Number(time), // duration in seconds
-                  new PublicKey(priceKey) // pythPriceKey
-                )
+                // createBet(
+                //   new BN(Number(sol) * LAMPORTS_PER_SOL), // bet amount in lamports(10^-9 SOL)
+                //   Number(guess), // prediction price
+                //   Number(time), // duration in seconds
+                //   new PublicKey(priceKey) // pythPriceKey
+                // )
+                staticCreatebet()
               }
               }
             />

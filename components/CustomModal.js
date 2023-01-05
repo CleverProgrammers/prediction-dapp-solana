@@ -31,7 +31,11 @@ const CustomModal = ({
   const [p2Guess, setP2Guess] = useState(0);
   const [low, setLow] = useState(selectedBet.low);
 
-  const { enterBet } = useGlobalState()
+
+  // Static 
+  const staticEnterbet = () => {
+    console.log("Closing bet")
+  }
 
 
   const onClose = () => {
@@ -95,7 +99,7 @@ const CustomModal = ({
             }${" bg-[#5cdb5c] w-1/2 text-center mt-8 self-center px-2"}`}
           onClick={(e) => {
             e.preventDefault()
-            enterBet(Number(p2Guess), selectedBet)
+            staticEnterBet(Number(p2Guess), selectedBet)
           }}
         /> <input
             type="submit"
