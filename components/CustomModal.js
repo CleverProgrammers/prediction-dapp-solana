@@ -21,23 +21,18 @@ const customStyles = {
     backgroundColor: "#1E2123",
   },
 };
-export default function CustomModal({
+const CustomModal = ({
   isOpen,
   selectedBet,
   setAvailableStock,
   setShowModal,
-}) {
+}) => {
   const [high, setHigh] = useState(selectedBet.high);
   const [p2Guess, setP2Guess] = useState(0);
   const [low, setLow] = useState(selectedBet.low);
 
   const { enterBet } = useGlobalState()
 
-  useEffect(() => {
-    setHigh(selectedBet.high);
-    setLow(selectedBet.low);
-    // setSol(selectedBet.sol);
-  }, [selectedBet]);
 
   const onClose = () => {
     setHigh(selectedBet.high)
@@ -45,31 +40,12 @@ export default function CustomModal({
     setShowModal(false)
   }
 
-  const updateState = (e) => {
-    setAvailableStock((prevState) => {
-      const newState = prevState.map((obj) => {
-        if (obj.id === selectedBet.id) {
-          return {
-            ...obj,
-            high: high,
-            low: low,
-            sol: parseInt(sol) + parseInt(selectedBet.sol),
-          };
-        }
-        return obj;
-      });
-      return newState;
-    });
-    setShowModal(false);
-  };
+
   return (
     <Modal
       isOpen={isOpen}
-      // onAfterOpen={afterOpenModal}
-      // onRequestClose={closeModal}
       shouldCloseOnOverlayClick={true}
       style={customStyles}
-    // contentLabel="Example Modal"
     >
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-[#ffffff] text-2xl">{selectedBet.stockName}</h1>
@@ -119,8 +95,7 @@ export default function CustomModal({
             }${" bg-[#5cdb5c] w-1/2 text-center mt-8 self-center px-2"}`}
           onClick={(e) => {
             e.preventDefault()
-            // enterBet(Number(p2Guess), selectedBet)
-            enterBet(5.5, selectedBet)
+            enterBet(Number(p2Guess), selectedBet)
           }}
         /> <input
             type="submit"
@@ -134,3 +109,5 @@ export default function CustomModal({
     </Modal>
   );
 }
+
+export default CustomModal

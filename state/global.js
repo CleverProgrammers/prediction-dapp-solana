@@ -25,7 +25,7 @@ export const GlobalState = ({ children }) => {
   const [masterAccount, setMasterAccount] = useState();
   const [allBets, setAllBets] = useState();
   const [userBets, setUserBets] = useState();
-  const [state, setState] = useState('')
+  const [transactionPending, setTransactionPending] = useState(false)
 
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
@@ -105,6 +105,7 @@ export const GlobalState = ({ children }) => {
   const createBet = useCallback(
     async (amount, price, duration, pythPriceKey) => {
       if (!masterAccount) return;
+      setTransactionPending(true)
 
       try {
         await airdrop();
@@ -126,7 +127,7 @@ export const GlobalState = ({ children }) => {
         toast.error("Failed to create bet!")
         console.log("Couldn't create bet:", e.message);
       } finally {
-        setState('')
+        setTransactionPending(false)
       }
     },
     [masterAccount]
@@ -136,6 +137,7 @@ export const GlobalState = ({ children }) => {
     async (price, bet) => {
       console.log({ masterAccount });
       if (!masterAccount) return;
+      setTransactionPending(true)
 
       try {
         await airdrop();
@@ -152,7 +154,7 @@ export const GlobalState = ({ children }) => {
         toast.error("Failed to enter bet!")
         console.log("Couldn't enter bet:", e.message);
       } finally {
-        setState('')
+        setTransactionPending(false)
       }
     },
     [masterAccount]
@@ -161,6 +163,7 @@ export const GlobalState = ({ children }) => {
   const claimBet = useCallback(
     async (bet) => {
       if (!masterAccount) return;
+      setTransactionPending(true)
 
       try {
         await airdrop();
@@ -180,7 +183,7 @@ export const GlobalState = ({ children }) => {
         toast.error("Failed to claim bet!")
         console.log("Couldn't claim bet:", e.message);
       } finally {
-        setState('')
+        setTransactionPending(false)
       }
     },
     [masterAccount]
@@ -189,6 +192,7 @@ export const GlobalState = ({ children }) => {
   const closeBet = useCallback(
     async (bet) => {
       if (!masterAccount) return;
+      setTransactionPending(true)
 
       try {
         await airdrop();
@@ -205,7 +209,7 @@ export const GlobalState = ({ children }) => {
         toast.error("Failed to close bet!")
         console.log("Couldn't close bet:", e.message);
       } finally {
-        setState('')
+        setTransactionPending(false)
       }
     },
     [masterAccount]

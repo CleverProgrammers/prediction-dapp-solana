@@ -18,11 +18,11 @@ import { useGlobalState } from "../hooks";
 import { getSolAmount, getCanEnterBet } from "../utils";
 import { IoMdClose } from "react-icons/io";
 
-export default function AvailableBets({
+const AvailableBets = ({
   availableStock,
   setSelectedBet,
   setShowModal,
-}) {
+}) => {
   // SOLANA STUFF
   const { allBets, closeBet, claimBet } = useGlobalState()
 
@@ -30,7 +30,7 @@ export default function AvailableBets({
   let array = STOCKDATA.filter((stock) => {
     return stock.priceKey == thing
   })
-  console.log(array)
+
 
   const getStockName = (key) => {
     let name = ""
@@ -99,5 +99,7 @@ export default function AvailableBets({
     </div>
   );
 }
+
+export default AvailableBets
 
 

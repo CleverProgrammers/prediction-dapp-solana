@@ -1,16 +1,13 @@
 //Components
 import Header from "../components/Header";
 import PortfolioChart from "../components/PortfolioChart";
-// import Asset from "../components/Asset";
 
 //Icons
-// import { BiDotsHorizontalRounded } from "react-icons/bi";
-// import { AiOutlinePlus } from "react-icons/ai";
-// import { BsPlusLg } from "react-icons/bs";
 import { IoMdArrowDropdown } from "react-icons/io";
-// import Modal from "react-modal";
+
 //Dependencies
 import { useState, useContext, useEffect } from "react";
+import { Toaster } from 'react-hot-toast';
 import { PredictionContext } from "../context/PredictionContext";
 import { STOCKDATA, CRYPTODATA } from "../data/asset.seed";
 import DropDown from "../components/DropDown";
@@ -22,11 +19,8 @@ import CustomModal from "../components/CustomModal";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { BN } from "@project-serum/anchor";
-
 import { useGlobalState } from "../hooks";
 import { getCanEnterBet, getSolAmount } from "../utils";
-
-import { Toaster } from 'react-hot-toast';
 
 
 //Styles
@@ -73,13 +67,12 @@ const timeTypes = [
   "days",
   "months"
 ]
-export default function Home({ coins }) {
-  const [myCoins] = useState([{}, {}, {}, {}]);
+const Home = () => {
+
   const [showStockDropDown, setShowStockDropDown] = useState(false);
   const [showAssetDropDown, setShowAssetDropDown] = useState(true);
   const [showBetDropdown, setShowBetDropdown] = useState(false);
   const [data, setData] = useState(STOCKDATA[0]);
-  const [high, setHigh] = useState(false);
   const [guess, setGuess] = useState('');
   const [sol, setSol] = useState('');
   const [time, setTime] = useState('');
@@ -91,7 +84,6 @@ export default function Home({ coins }) {
   const [stockPrice, setStockPrice] = useState(STOCKDATA[0].price);
   const [priceKey, setPriceKey] = useState(STOCKDATA[0].priceKey);
   const [availableStock, setAvailableStock] = useState([]);
-  const [low, setLow] = useState(false);
   const { balance, swapError } = useContext(PredictionContext);
 
   // SOLANA STATES
@@ -106,51 +98,6 @@ export default function Home({ coins }) {
     claimBet,
     closeBet,
   } = useGlobalState();
-
-
-
-  // const createStock = (e) => {
-  //   e.preventDefault();
-  //   if ((!high && !low) || !sol || !time) {
-  //     alert("Missing Fields");
-  //   } else {
-  //     let data = {
-  //       high: high,
-  //       low: low,
-  //       stockName: stockName,
-  //       stockPrice: stockPrice,
-  //       sol: sol,
-  //       time: time,
-  //       timeType: timeType,
-  //       id: availableStock.length,
-  //     };
-  //     setAvailableStock((oldData) => {
-  //       return [...oldData, data];
-  //     });
-  //     let newStockInDropDown = STOCKDATA.filter((data) => {
-  //       let availableBetStockName = [...availableStock, {
-  //         high: high,
-  //         low: low,
-  //         stockName: stockName,
-  //         stockPrice: stockPrice,
-  //         sol: sol,
-  //         time: time,
-  //         timeType: timeType,
-  //         id: availableStock.length,
-  //       }].map((item) => item.stockName)
-  //       if (!availableBetStockName.includes(data.name)) {
-  //         return data
-  //       } else {
-  //         return
-  //       }
-  //     })
-  //     setStockName(newStockInDropDown[0]?.name);
-  //     setStockPrice(newStockInDropDown[0]?.price);
-  //     setTime('');
-  //     setSol('');
-  //   }
-
-  // };
 
 
   return (
@@ -214,28 +161,10 @@ export default function Home({ coins }) {
           </div>
 
           <div className={styles.formButtons}>
-            {/* <div
-              className={`${styles.button}${high && " bg-[#00ff1a]"}`}
-              onClick={() => {
-                setHigh(!high);
-                setLow(false);
-              }}
-            >
-              HIGH
-            </div> */}
             <div
             >
               <p className="text-[#ffffff]">Current Stock Price: ${stockPrice}</p>
             </div>
-            {/* <div
-              className={`${styles.button}${low && " bg-[#ef4b09]"}`}
-              onClick={() => {
-                setLow(!low);
-                setHigh(false);
-              }}
-            >
-              LOW
-            </div> */}
           </div>
           <form className="flex flex-col">
             <div className={styles.inputForm}>
@@ -306,12 +235,6 @@ export default function Home({ coins }) {
                   Number(time), // duration in seconds
                   new PublicKey(priceKey) // pythPriceKey
                 )
-                // createBet(
-                //   new BN(Number(sol) * LAMPORTS_PER_SOL), // bet amount in lamports(10^-9 SOL)
-                //   4.84, // prediction price
-                //   150, // duration in seconds
-                //   new PublicKey("E4m5GPq53mayAxMSH8NwPuC75m83mQ47zpdtNDtxVzPf") // pythPriceKey
-                // )
               }
               }
             />
@@ -349,3 +272,5 @@ export default function Home({ coins }) {
     </div>
   );
 }
+
+export default Home

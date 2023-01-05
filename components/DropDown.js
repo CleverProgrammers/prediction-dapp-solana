@@ -14,13 +14,13 @@ const styles = {
   moreOptions: "cursor-pointer text-xl",
 };
 
-export default function DropDown({
+const DropDown = ({
   data,
   setData,
   showDropDown,
   setShowDropDown,
   title,
-}) {
+}) => {
   return (
     <>
       <div
@@ -51,3 +51,5 @@ export default function DropDown({
     </>
   );
 }
+
+export default DropDown
