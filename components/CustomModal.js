@@ -31,19 +31,19 @@ const CustomModal = ({
   const [p2Guess, setP2Guess] = useState(0);
   const [low, setLow] = useState(selectedBet.low);
 
+  const { enterBet } = useGlobalState();
 
-  // Static 
-  const staticEnterbet = () => {
-    console.log("Closing bet")
-  }
-
+  useEffect(() => {
+    setHigh(selectedBet.high);
+    setLow(selectedBet.low);
+    // setSol(selectedBet.sol);
+  }, [selectedBet]);
 
   const onClose = () => {
-    setHigh(selectedBet.high)
-    setLow(selectedBet.low)
-    setShowModal(false)
-  }
-
+    setHigh(selectedBet.high);
+    setLow(selectedBet.low);
+    setShowModal(false);
+  };
 
   return (
     <Modal
@@ -53,9 +53,14 @@ const CustomModal = ({
     >
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-[#ffffff] text-2xl">{selectedBet.stockName}</h1>
-        <p className="text-[#ffffff]">Length of Bet: 2 minutes {selectedBet.timeType}</p>
+        <p className="text-[#ffffff]">
+          Length of Bet: 2 minutes {selectedBet.timeType}
+        </p>
         <p className="text-[#ffffff]">Stock price: $4.9</p>
-        <p className="text-[#ffffff]">Entrance fee: {selectedBet ? getSolAmount(selectedBet.amount) : new BigNum} SOL</p>
+        <p className="text-[#ffffff]">
+          Entrance fee:{" "}
+          {selectedBet ? getSolAmount(selectedBet.amount) : new BigNum()} SOL
+        </p>
       </div>
 
       <div className={styles.formButtons}>
@@ -92,26 +97,31 @@ const CustomModal = ({
             value={p2Guess}
           />
         </div>
-        <div className="flex flex-row justify-between w-full px-2"> <input
-          type="submit"
-          value="Submit"
-          className={`${styles.button
+        <div className="flex flex-row justify-between w-full px-2">
+          {" "}
+          <input
+            type="submit"
+            value="Submit"
+            className={`${
+              styles.button
             }${" bg-[#5cdb5c] w-1/2 text-center mt-8 self-center px-2"}`}
-          onClick={(e) => {
-            e.preventDefault()
-            staticEnterBet(Number(p2Guess), selectedBet)
-          }}
-        /> <input
+            onClick={(e) => {
+              e.preventDefault();
+              enterBet(Number(p2Guess), selectedBet);
+            }}
+          />{" "}
+          <input
             type="submit"
             value="Cancel"
-            className={`${styles.button
-              }${" bg-[#ef4b09] w-1/2 text-center mt-8 self-center px-2"}`}
+            className={`${
+              styles.button
+            }${" bg-[#ef4b09] w-1/2 text-center mt-8 self-center px-2"}`}
             onClick={onClose}
-          /></div>
-
+          />
+        </div>
       </form>
     </Modal>
   );
-}
+};
 
-export default CustomModal
+export default CustomModal;

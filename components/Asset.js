@@ -13,7 +13,7 @@ const styles = {
 
 const Asset = ({ coin, price, setData }) => {
   const setGraphColor = () => {
-    if (coin.change < 0) {
+    if (coin.percentage < 0) {
       return "#ef4b09";
     } else {
       return "#00ff1a";
@@ -67,9 +67,9 @@ const Asset = ({ coin, price, setData }) => {
         <div>{coin.name}</div>
         <div
           className={styles.percent}
-          style={{ color: coin.change < 0 ? "#ef4b09" : "green" }}
+          style={{ color: coin.percentage < 0 ? "#ef4b09" : "green" }}
         >
-          {coin.change}%
+          {coin.percentage}%
         </div>
       </div>
     </div>

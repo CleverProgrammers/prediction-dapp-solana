@@ -7,18 +7,16 @@ import { IoMdArrowDropdown } from "react-icons/io";
 
 //Dependencies
 import { useState, useContext, useEffect } from "react";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import { STOCKDATA, CRYPTODATA } from "../data/asset.seed";
 import DropDown from "../components/DropDown";
 import AvailableBets from "../components/AvailableBets";
 import CustomModal from "../components/CustomModal";
 
-
 // SOLANA IMPORTS
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { BN } from "@project-serum/anchor";
 import { useGlobalState } from "../hooks";
-
 
 //Styles
 const styles = {
@@ -59,49 +57,48 @@ const styles = {
   currentStockPriceTitle: "text-[8px] text-[#ffffff] mt-4",
   currentStockPriceAmount: "text-lg text-[#ffffff]",
 };
-const timeTypes = [
-  "seconds",
-  "days",
-  "months"
-]
+const timeTypes = ["seconds", "days", "months"];
 const Home = () => {
-
   const [showStockDropDown, setShowStockDropDown] = useState(false);
   const [showAssetDropDown, setShowAssetDropDown] = useState(true);
   const [showBetDropdown, setShowBetDropdown] = useState(false);
   const [data, setData] = useState(STOCKDATA[0]);
-  const [guess, setGuess] = useState('');
-  const [sol, setSol] = useState('');
-  const [time, setTime] = useState('');
+  const [guess, setGuess] = useState("");
+  const [sol, setSol] = useState("");
+  const [time, setTime] = useState("");
   const [timeType, setTimeType] = useState(timeTypes[0]);
   const [timeDropDown, setTimeTypeDropDown] = useState(false);
   const [selectedBet, setSelectedBet] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [stockName, setStockName] = useState(STOCKDATA[0].name);
   const [stockPrice, setStockPrice] = useState(STOCKDATA[0].price);
+  const [ourpred, setOurpred] = useState(STOCKDATA[0].ourpred);
   const [priceKey, setPriceKey] = useState(STOCKDATA[0].priceKey);
   const [availableStock, setAvailableStock] = useState([]);
 
-  // Static
-  const staticCreatebet = () => {
-    console.log("Creating bet")
-  }
+  // SOLANA STATES
+  const {
+    isConnected,
+    wallet,
+    allBets,
+    userBets,
+    fetchBets,
+    createBet,
+    enterBet,
+    claimBet,
+    closeBet,
+  } = useGlobalState();
 
   return (
     <div className={styles.wrapper}>
       <Header />
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-      />
+      <Toaster position="top-center" reverseOrder={false} />
       <div className={styles.mainContainer}>
         <div className={styles.leftMain}>
           <div className={styles.portfolioAmountContainer}>
-            <div className={styles.portfolioAmount}>
-              {data.name}
-            </div>
+            <div className={styles.portfolioAmount}>{data.name}</div>
             <div className={styles.portfolioPercent}>
-              +0.0008(+0.57%)
+              {"$" + data.change + " (" + data.percentage + "%)"}
               <span className={styles.pastHour}>Past Hour</span>
             </div>
           </div>
@@ -119,11 +116,13 @@ const Home = () => {
               {showBetDropdown && (
                 <div className={styles.dropDownBets}>
                   {STOCKDATA.filter((data) => {
-                    let availableBetStockName = availableStock.map((item) => item.stockName)
+                    let availableBetStockName = availableStock.map(
+                      (item) => item.stockName
+                    );
                     if (!availableBetStockName.includes(data.name)) {
-                      return data
+                      return data;
                     } else {
-                      return
+                      return;
                     }
                   }).map((data) => {
                     return (
@@ -134,6 +133,7 @@ const Home = () => {
                           setStockPrice(data.price);
                           setPriceKey(data.priceKey);
                           setData(data);
+                          setOurpred(data.ourpred);
                         }}
                       >
                         {data.name}
@@ -147,9 +147,11 @@ const Home = () => {
           </div>
 
           <div className={styles.formButtons}>
-            <div
-            >
-              <p className="text-[#ffffff]">Current Stock Price: ${stockPrice}</p>
+            <div>
+              <p className="text-[#ffffff]">
+                Current Stock Price: $
+                {stockPrice + " (our prediction: $" + ourpred + ")"}
+              </p>
             </div>
           </div>
           <form className="flex flex-col">
@@ -196,7 +198,7 @@ const Home = () => {
                         <p
                           key={data.name}
                           onClick={() => {
-                            setTimeType(data)
+                            setTimeType(data);
                           }}
                         >
                           {data}
@@ -211,19 +213,18 @@ const Home = () => {
               type="submit"
               disabled={availableStock.length === STOCKDATA.length}
               value="Submit"
-              className={`${styles.button
-                }${" bg-[#ef4b09] w-1/4 text-center mt-8 self-center"}`}
+              className={`${
+                styles.button
+              }${" bg-[#ef4b09] w-1/4 text-center mt-8 self-center"}`}
               onClick={(e) => {
-                e.preventDefault()
-                // createBet(
-                //   new BN(Number(sol) * LAMPORTS_PER_SOL), // bet amount in lamports(10^-9 SOL)
-                //   Number(guess), // prediction price
-                //   Number(time), // duration in seconds
-                //   new PublicKey(priceKey) // pythPriceKey
-                // )
-                staticCreatebet()
-              }
-              }
+                e.preventDefault();
+                createBet(
+                  new BN(Number(sol) * LAMPORTS_PER_SOL), // bet amount in lamports(10^-9 SOL)
+                  Number(guess), // prediction price
+                  Number(time), // duration in seconds
+                  new PublicKey(priceKey) // pythPriceKey
+                );
+              }}
             />
           </form>
           <AvailableBets
@@ -258,6 +259,6 @@ const Home = () => {
       />
     </div>
   );
-}
+};
 
-export default Home
+export default Home;

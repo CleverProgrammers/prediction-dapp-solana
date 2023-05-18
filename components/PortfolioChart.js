@@ -13,7 +13,7 @@ import React from "react";
 
 const PortfolioChart = ({ data }) => {
   const setGraphColor = () => {
-    if (data.change < 0) {
+    if (data.percentage < 0) {
       return "#ef4b09";
     } else {
       return "#00ff1a";
@@ -21,16 +21,16 @@ const PortfolioChart = ({ data }) => {
   };
   const lineGraph = {
     labels: [
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sept",
-      "Oct",
-      "Noz",
-      "Dec",
-      "Jan",
+      "May 01, 2023",
+      "May 02, 2023",
+      "May 03, 2023",
+      "May 04, 2023",
+      "May 05, 2023",
+      "May 08, 2023",
+      "May 09, 2023",
+      "May 10, 2023",
+      "May 11, 2023",
+      "May 12, 2023",
     ],
     datasets: [
       {
